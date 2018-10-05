@@ -3,20 +3,29 @@ package com.htdwps.bakingappudacityproject;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.htdwps.bakingappudacityproject.dummy.DummyContent;
+import com.htdwps.bakingappudacityproject.adapter.RecipeApiService;
+import com.htdwps.bakingappudacityproject.adapter.RecipeCardAdapter;
+import com.htdwps.bakingappudacityproject.adapter.RetrofitClientManager;
+import com.htdwps.bakingappudacityproject.models.Recipe;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * An activity representing a list of Recipes. This activity
@@ -34,23 +43,21 @@ public class RecipeListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
 
+    private RecipeCardAdapter recipeCardAdapter;
+    private List<Recipe> recipesList;
+    private LinearLayoutManager layoutManager;
+    private Parcelable savedRecyclerLayoutState;
+    View recyclerView;
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         if (findViewById(R.id.recipe_detail_container) != null) {
             // The detail container view will be present only in the
@@ -60,27 +67,99 @@ public class RecipeListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
-        View recyclerView = findViewById(R.id.recipe_list);
+        recyclerView = findViewById(R.id.recipe_list);
         assert recyclerView != null;
+
+//        recipesList = new ArrayList<>();
+//
+//        recipeCardAdapter = new RecipeCardAdapter(this, recipesList, new RecipeCardAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(Recipe recipe) {
+//
+//            }
+//        });
+
         setupRecyclerView((RecyclerView) recyclerView);
+
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane));
+    private void setupRecyclerView(@NonNull final RecyclerView recyclerView) {
+
+        try {
+
+            RecipeApiService recipeApiService = RetrofitClientManager.getClient().create(RecipeApiService.class);
+
+            Call<ArrayList<Recipe>> recipeCall;
+
+            recipeCall = recipeApiService.getRecipeList();
+
+            recipeCall.enqueue(new Callback<ArrayList<Recipe>>() {
+                @Override
+                public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
+
+                    try {
+
+                        ArrayList<Recipe> recipes = response.body();
+
+                        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(RecipeListActivity.this, recipes, mTwoPane));
+
+//                        recyclerView.setAdapter(new RecipeCardAdapter(getApplicationContext(), recipes, new RecipeCardAdapter.OnItemClickListener() {
+//                            @Override
+//                            public void onItemClick(Recipe recipe) {
+//
+//                                Toast.makeText(RecipeListActivity.this, recipe.getName() + " ID: " + recipe.getId(), Toast.LENGTH_SHORT).show();
+//
+//                                Intent recipeIntent = new Intent(getBaseContext(), RecipeDetailActivity.class);
+//
+//                                recipeIntent.putExtra(StringConstantHelper.RECIPE_OBJECT_KEY, recipe);
+//
+//                                startActivity(recipeIntent);
+//
+//                            }
+//                        }));
+
+                        if (savedRecyclerLayoutState != null) {
+                            restoreRecyclerViewPosition(savedRecyclerLayoutState);
+                        }
+
+                        Log.i("server", "Success: List size " + String.valueOf(recipes.size()));
+
+                    } catch (NullPointerException e) {
+
+                        Log.i("server", "error retrieving data");
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
+
+                    Log.i("server", "Failure");
+                    Log.i("server", t.getMessage());
+
+                }
+            });
+
+        } catch (Exception e) {
+
+            Log.i("server", e.getMessage());
+
+        }
+
     }
 
     public static class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final RecipeListActivity mParentActivity;
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<Recipe> mValues;
         private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+                Recipe item = (Recipe) view.getTag();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putString(RecipeDetailFragment.ARG_ITEM_ID, item.id);
+                    arguments.putString(RecipeDetailFragment.ARG_ITEM_ID, item.getName());
                     RecipeDetailFragment fragment = new RecipeDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -89,16 +168,14 @@ public class RecipeListActivity extends AppCompatActivity {
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, RecipeDetailActivity.class);
-                    intent.putExtra(RecipeDetailFragment.ARG_ITEM_ID, item.id);
+                    intent.putExtra(RecipeDetailFragment.ARG_ITEM_ID, item.getName());
 
                     context.startActivity(intent);
                 }
             }
         };
 
-        SimpleItemRecyclerViewAdapter(RecipeListActivity parent,
-                                      List<DummyContent.DummyItem> items,
-                                      boolean twoPane) {
+        SimpleItemRecyclerViewAdapter(RecipeListActivity parent, List<Recipe> items, boolean twoPane) {
             mValues = items;
             mParentActivity = parent;
             mTwoPane = twoPane;
@@ -106,15 +183,13 @@ public class RecipeListActivity extends AppCompatActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.recipe_list_content, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_list_content, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIdView.setText(mValues.get(position).getName());
 
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
@@ -127,13 +202,37 @@ public class RecipeListActivity extends AppCompatActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             final TextView mIdView;
-            final TextView mContentView;
 
             ViewHolder(View view) {
                 super(view);
                 mIdView = (TextView) view.findViewById(R.id.id_text);
-                mContentView = (TextView) view.findViewById(R.id.content);
             }
         }
     }
+
+    private void restoreRecyclerViewPosition(Parcelable position) {
+        layoutManager.onRestoreInstanceState(position);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+//        outState.putParcelable(StringConstantHelper.RECYCLERVIEW_STATE_STORE, layoutManager.onSaveInstanceState());
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // restore recyclerview to same position
+        if (savedInstanceState != null) {
+
+//            savedRecyclerLayoutState = savedInstanceState.getParcelable(StringConstantHelper.RECYCLERVIEW_STATE_STORE);
+
+        }
+
+    }
+
 }
