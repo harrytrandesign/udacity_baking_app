@@ -14,11 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.htdwps.bakingappudacityproject.adapter.RecipeApiService;
 import com.htdwps.bakingappudacityproject.adapter.RecipeCardAdapter;
 import com.htdwps.bakingappudacityproject.adapter.RetrofitClientManager;
 import com.htdwps.bakingappudacityproject.models.Recipe;
+import com.htdwps.bakingappudacityproject.util.StringConstantHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +72,8 @@ public class RecipeListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recipe_list);
         assert recyclerView != null;
 
+
+
 //        recipesList = new ArrayList<>();
 //
 //        recipeCardAdapter = new RecipeCardAdapter(this, recipesList, new RecipeCardAdapter.OnItemClickListener() {
@@ -100,6 +104,8 @@ public class RecipeListActivity extends AppCompatActivity {
                     try {
 
                         ArrayList<Recipe> recipes = response.body();
+
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
 
                         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(RecipeListActivity.this, recipes, mTwoPane));
 
@@ -156,21 +162,29 @@ public class RecipeListActivity extends AppCompatActivity {
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Recipe item = (Recipe) view.getTag();
+                Recipe recipe = (Recipe) view.getTag();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putString(RecipeDetailFragment.ARG_ITEM_ID, item.getName());
+                    arguments.putParcelable(StringConstantHelper.RECIPE_OBJECT_KEY, recipe);
                     RecipeDetailFragment fragment = new RecipeDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.recipe_detail_container, fragment)
                             .commit();
+
+                    // Todo Remove
+                    Toast.makeText(mParentActivity, "Hello This Change For Tablet", Toast.LENGTH_SHORT).show();
                 } else {
                     Context context = view.getContext();
-                    Intent intent = new Intent(context, RecipeDetailActivity.class);
-                    intent.putExtra(RecipeDetailFragment.ARG_ITEM_ID, item.getName());
 
-                    context.startActivity(intent);
+                    // Todo Remove
+                    Toast.makeText(context, "This is for Phone" + recipe.getName(), Toast.LENGTH_SHORT).show();
+
+                    Intent recipeIntent = new Intent(context, RecipeDetailActivity.class);
+
+                    recipeIntent.putExtra(StringConstantHelper.RECIPE_OBJECT_KEY, recipe);
+
+                    context.startActivity(recipeIntent);
                 }
             }
         };
