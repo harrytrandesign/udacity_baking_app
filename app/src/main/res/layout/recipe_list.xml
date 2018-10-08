@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_ingredient_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/standard_padding"
+        android:paddingStart="@dimen/standard_padding"
+        android:text="@string/ingredient_label_text"
+        android:textAllCaps="true"
+        android:textSize="@dimen/header_font"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_ingredients_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/standard_padding"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_instruction_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/standard_padding"
+        android:paddingStart="@dimen/standard_padding"
+        android:text="@string/instructions_label_text"
+        android:textAllCaps="true"
+        android:textSize="@dimen/header_font"
+        android:textStyle="bold"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_recipe_steps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

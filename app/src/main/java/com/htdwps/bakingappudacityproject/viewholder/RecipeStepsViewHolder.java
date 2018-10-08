@@ -31,6 +31,7 @@ public class RecipeStepsViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
 
+                int whichStep = getAdapterPosition();
                 listener.onItemClick(step);
 
             }
