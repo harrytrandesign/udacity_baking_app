@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.htdwps.bakingappudacityproject.adapter.StepsCardAdapter;
 import com.htdwps.bakingappudacityproject.models.Ingredient;
 import com.htdwps.bakingappudacityproject.models.Recipe;
 import com.htdwps.bakingappudacityproject.models.Step;
@@ -41,6 +42,7 @@ public class StepListActivity extends AppCompatActivity {
     private Recipe recipe;
     private TextView tvIngredientsListed;
     private Toolbar toolbar;
+    private RecyclerView recyclerView;
 
     private String ingredientsString = "";
 
@@ -68,12 +70,12 @@ public class StepListActivity extends AppCompatActivity {
 
         }
 
-        View recyclerView = findViewById(R.id.step_list);
+        recyclerView = findViewById(R.id.step_list);
         assert recyclerView != null;
 
         grabBundledExtras();
 
-        setupRecyclerView((RecyclerView) recyclerView);
+//        setupRecyclerView((RecyclerView) recyclerView);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -98,33 +100,47 @@ public class StepListActivity extends AppCompatActivity {
                 Ingredient mIngredient = ingredientsList.get(i);
 
                 if (i != ingredientsList.size()) {
-                    ingredientsString += mIngredient.getQuantity() + "" + mIngredient.getMeasure() + " " + mIngredient.getIngredient() + "\n";
+                    ingredientsString += mIngredient.getQuantity() + " " + mIngredient.getMeasure() + " " + mIngredient.getIngredient() + "\n";
                 } else {
-                    ingredientsString += mIngredient.getQuantity() + "" + mIngredient.getMeasure() + " " + mIngredient.getIngredient();
+                    ingredientsString += mIngredient.getQuantity() + " " + mIngredient.getMeasure() + " " + mIngredient.getIngredient();
                 }
 
                 tvIngredientsListed.setText(ingredientsString);
 
-//                Toast.makeText(this, ingredientsString, Toast.LENGTH_SHORT).show();
-
             }
 
-//            rvRecipeSteps.setAdapter(new StepsCardAdapter(getApplicationContext(), stepList, new StepsCardAdapter.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(Step step) {
-//
-//                    Intent stepIntent = new Intent(getBaseContext(), StepActivity.class);
-//
-//                    stepIntent.putExtra(StringConstantHelper.STEPS_OBJECT_KEY, step);
-//
-//                    startActivity(stepIntent);
-//
-//                }
-//            }));
+            recyclerView.setAdapter(new StepsCardAdapter(this, stepList, new StepsCardAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, Step step, int whichStep) {
+
+                    if (mTwoPane) {
+
+                        Toast.makeText(StepListActivity.this, "Tablet " + whichStep, Toast.LENGTH_SHORT).show();
+
+
+                    } else {
+
+                        Toast.makeText(StepListActivity.this, "Phone " + whichStep, Toast.LENGTH_SHORT).show();
+
+                        Context context = view.getContext();
+
+                        Intent intent = new Intent(context, StepDetailActivity.class);
+
+                        intent.putExtra(StringConstantHelper.STEPS_LIST_ITEM_OBJECT_KEY, recipe);
+                        intent.putExtra(StringConstantHelper.STEPS_OBJECT_KEY, step);
+                        intent.putExtra(StringConstantHelper.STEPS_POSITION_INT_KEY, whichStep);
+
+                        context.startActivity(intent);
+
+                    }
+                }
+            }));
+
 
         }
 
     }
+
 
     public static class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 

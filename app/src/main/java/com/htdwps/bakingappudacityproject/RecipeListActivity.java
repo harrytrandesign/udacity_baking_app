@@ -21,7 +21,6 @@ import android.widget.Toast;
 import com.htdwps.bakingappudacityproject.adapter.RecipeApiService;
 import com.htdwps.bakingappudacityproject.adapter.RecipeCardAdapter;
 import com.htdwps.bakingappudacityproject.adapter.RetrofitClientManager;
-import com.htdwps.bakingappudacityproject.adapter.StepsCardAdapter;
 import com.htdwps.bakingappudacityproject.models.Ingredient;
 import com.htdwps.bakingappudacityproject.models.Recipe;
 import com.htdwps.bakingappudacityproject.models.Step;
@@ -152,46 +151,46 @@ public class RecipeListActivity extends AppCompatActivity {
 
             }
 
-            rvRecipeSteps.setAdapter(new StepsCardAdapter(getApplicationContext(), stepsList, new StepsCardAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(Step step) {
-
-                    if (mTwoPane) {
-
-                        Bundle arguments = new Bundle();
-                        arguments.putParcelable(StringConstantHelper.RECIPE_OBJECT_KEY, recipe);
-                        RecipeDetailFragment fragment = new RecipeDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.recipe_detail_container, fragment)
-                                .commit();
-
-                        // Todo Remove
-//                        Toast.makeText(getApplicationContext(), "Hello This Change For Tablet", Toast.LENGTH_SHORT).show();
-
-                    } else {
-
-                        Context context = getApplicationContext();
-
-                        // Todo Remove
-//                        Toast.makeText(context, "This is for Phone" + recipe.getName(), Toast.LENGTH_SHORT).show();
-
-                        Intent recipeIntent = new Intent(context, RecipeDetailActivity.class);
-
-                        recipeIntent.putExtra(StringConstantHelper.RECIPE_OBJECT_KEY, recipe);
-
-                        context.startActivity(recipeIntent);
-
-                    }
-
-                    Intent stepIntent = new Intent(getBaseContext(), RecipeDetailActivity.class);
-
-                    stepIntent.putExtra(StringConstantHelper.STEPS_OBJECT_KEY, step);
-
-                    startActivity(stepIntent);
-
-                }
-            }));
+//            rvRecipeSteps.setAdapter(new StepsCardAdapter(getApplicationContext(), stepsList, new StepsCardAdapter.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(Step step) {
+//
+//                    if (mTwoPane) {
+//
+//                        Bundle arguments = new Bundle();
+//                        arguments.putParcelable(StringConstantHelper.RECIPE_OBJECT_KEY, recipe);
+//                        RecipeDetailFragment fragment = new RecipeDetailFragment();
+//                        fragment.setArguments(arguments);
+//                        getSupportFragmentManager().beginTransaction()
+//                                .replace(R.id.recipe_detail_container, fragment)
+//                                .commit();
+//
+//                        // Todo Remove
+////                        Toast.makeText(getApplicationContext(), "Hello This Change For Tablet", Toast.LENGTH_SHORT).show();
+//
+//                    } else {
+//
+//                        Context context = getApplicationContext();
+//
+//                        // Todo Remove
+////                        Toast.makeText(context, "This is for Phone" + recipe.getName(), Toast.LENGTH_SHORT).show();
+//
+//                        Intent recipeIntent = new Intent(context, RecipeDetailActivity.class);
+//
+//                        recipeIntent.putExtra(StringConstantHelper.RECIPE_OBJECT_KEY, recipe);
+//
+//                        context.startActivity(recipeIntent);
+//
+//                    }
+//
+//                    Intent stepIntent = new Intent(getBaseContext(), RecipeDetailActivity.class);
+//
+//                    stepIntent.putExtra(StringConstantHelper.STEPS_OBJECT_KEY, step);
+//
+//                    startActivity(stepIntent);
+//
+//                }
+//            }));
 
             Toast.makeText(this, recipeName, Toast.LENGTH_SHORT).show();
 

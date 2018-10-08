@@ -2,13 +2,13 @@ package com.htdwps.bakingappudacityproject;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import com.htdwps.bakingappudacityproject.models.Recipe;
+import com.htdwps.bakingappudacityproject.models.Step;
+import com.htdwps.bakingappudacityproject.util.StringConstantHelper;
 
 /**
  * An activity representing a single Step detail screen. This
@@ -18,21 +18,14 @@ import android.view.MenuItem;
  */
 public class StepDetailActivity extends AppCompatActivity {
 
+    Recipe recipe;
+    Step step;
+    int position;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -49,12 +42,21 @@ public class StepDetailActivity extends AppCompatActivity {
         //
         // http://developer.android.com/guide/components/fragments.html
         //
-        if (savedInstanceState == null) {
+
+        if (getIntent().getExtras() != null) {
+
+            recipe = getIntent().getParcelableExtra(StringConstantHelper.STEPS_LIST_ITEM_OBJECT_KEY);
+            step = getIntent().getParcelableExtra(StringConstantHelper.STEPS_OBJECT_KEY);
+            position = getIntent().getIntExtra(StringConstantHelper.STEPS_POSITION_INT_KEY, 0);
+
+        }
+            if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(StepDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(StepDetailFragment.ARG_ITEM_ID));
+            arguments.putParcelable(StringConstantHelper.RECIPE_OBJECT_KEY, recipe);
+            arguments.putInt(StringConstantHelper.STEPS_POSITION_INT_KEY, position);
+
             StepDetailFragment fragment = new StepDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

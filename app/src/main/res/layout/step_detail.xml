@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView android:id="@+id/step_detail"
-          style="?android:attr/textAppearanceLarge"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:padding="16dp"
-          android:textIsSelectable="true"
-          tools:context=".StepDetailFragment"/>
+<LinearLayout android:id="@+id/linearlayout"
+              style="?android:attr/textAppearanceLarge"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="16dp"
+              android:textIsSelectable="true"
+              tools:context=".StepDetailFragment">
+
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        android:id="@+id/exoplayerview"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"/>
+
+    <TextView
+        android:id="@+id/step_description_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/standard_padding"/>
+
+</LinearLayout>

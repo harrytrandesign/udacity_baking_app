@@ -1,6 +1,7 @@
 package com.htdwps.bakingappudacityproject.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,9 +31,10 @@ public class StepsCardAdapter extends RecyclerView.Adapter<RecipeStepsViewHolder
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Step step);
+        void onItemClick(View view, Step step, int whichStep);
     }
 
+    @NonNull
     @Override
     public RecipeStepsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
