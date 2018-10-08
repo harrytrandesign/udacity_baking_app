@@ -1,5 +1,6 @@
 package com.htdwps.bakingappudacityproject;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -74,6 +75,10 @@ public class StepListActivity extends AppCompatActivity {
         assert recyclerView != null;
 
         grabBundledExtras();
+
+        // Display recent clicked recipe in widget
+        Intent updateWidgetBroadcastIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        this.sendBroadcast(updateWidgetBroadcastIntent);
 
 //        setupRecyclerView((RecyclerView) recyclerView);
     }
