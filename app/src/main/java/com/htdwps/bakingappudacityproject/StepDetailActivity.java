@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.htdwps.bakingappudacityproject.models.Recipe;
@@ -21,15 +22,21 @@ public class StepDetailActivity extends AppCompatActivity {
     Recipe recipe;
     Step step;
     int position;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
 
+        toolbar = (Toolbar) findViewById(R.id.step_toolbar);
+        setSupportActionBar(toolbar);
+//        toolbar.setTitle(getTitle());
+
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -55,6 +62,7 @@ public class StepDetailActivity extends AppCompatActivity {
             // using a fragment transaction.
             Bundle arguments = new Bundle();
             arguments.putParcelable(StringConstantHelper.RECIPE_OBJECT_KEY, recipe);
+            arguments.putParcelable(StringConstantHelper.STEPS_OBJECT_KEY, step);
             arguments.putInt(StringConstantHelper.STEPS_POSITION_INT_KEY, position);
 
             StepDetailFragment fragment = new StepDetailFragment();

@@ -3,6 +3,7 @@ package com.htdwps.bakingappudacityproject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayoutManager layoutManager;
     private GridLayoutManager gridLayoutManager;
     private Parcelable savedRecyclerLayoutState;
+    @Nullable
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

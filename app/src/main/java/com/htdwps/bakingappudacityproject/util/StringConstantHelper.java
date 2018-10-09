@@ -12,6 +12,8 @@ public class StringConstantHelper {
     public static final String STEPS_LIST_ITEM_OBJECT_KEY = "step_list";
     public static final String STEPS_POSITION_INT_KEY = "steps_position";
 
+    public static final String EXOPLAYER_VIDEO_POSITION = "video_position";
+
     public static final String WIDGET_RECIPE_NAME = "widget_recipe_name";
     public static final String WIDGET_RECIPE_INGREDIENTS = "widget_recipe_ingredients";
 

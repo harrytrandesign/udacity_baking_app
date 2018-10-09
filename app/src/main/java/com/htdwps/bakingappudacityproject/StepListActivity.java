@@ -3,8 +3,11 @@ package com.htdwps.bakingappudacityproject;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -38,9 +41,12 @@ public class StepListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
 
+    private StepListActivity mParentActivity;
+
     private List<Ingredient> ingredientsList;
     private List<Step> stepList;
     private Recipe recipe;
+    private TextView tvRecipeName;
     private TextView tvIngredientsListed;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
@@ -56,6 +62,14 @@ public class StepListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 //        toolbar.setTitle(getTitle());
 
+        // Show the Up button in the action bar.
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        tvRecipeName = findViewById(R.id.tv_recipe_name);
         tvIngredientsListed = findViewById(R.id.tv_ingredients_list_text);
         if (findViewById(R.id.step_detail_container) != null) {
 
@@ -77,8 +91,19 @@ public class StepListActivity extends AppCompatActivity {
         grabBundledExtras();
 
         // Display recent clicked recipe in widget
-        Intent updateWidgetBroadcastIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        this.sendBroadcast(updateWidgetBroadcastIntent);
+        if (savedInstanceState == null) {
+
+            SharedPreferences sharedPreferencesWidget = this.getSharedPreferences(getString(R.string.shared_pref_widget), Context.MODE_PRIVATE|Context.MODE_MULTI_PROCESS);
+            SharedPreferences.Editor editor = sharedPreferencesWidget.edit();
+            editor.putString(StringConstantHelper.WIDGET_RECIPE_NAME, recipe.getName());
+            editor.putString(StringConstantHelper.WIDGET_RECIPE_INGREDIENTS, ingredientsString);
+            editor.commit();
+
+            // Update the widget to know a new recipe has been selected
+            Intent updateWidgetIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            this.sendBroadcast(updateWidgetIntent);
+
+        }
 
 //        setupRecyclerView((RecyclerView) recyclerView);
     }
@@ -110,6 +135,7 @@ public class StepListActivity extends AppCompatActivity {
                     ingredientsString += mIngredient.getQuantity() + " " + mIngredient.getMeasure() + " " + mIngredient.getIngredient();
                 }
 
+                tvRecipeName.setText(recipeName);
                 tvIngredientsListed.setText(ingredientsString);
 
             }
@@ -122,6 +148,25 @@ public class StepListActivity extends AppCompatActivity {
 
                         Toast.makeText(StepListActivity.this, "Tablet " + whichStep, Toast.LENGTH_SHORT).show();
 
+//                        Bundle arguments = new Bundle();
+//                        arguments.putInt(StringConstantHelper.STEPS_POSITION_INT_KEY, whichStep);
+//
+                        StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance(whichStep);
+//                        stepDetailFragment.setArguments(arguments);
+//
+                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                        fragmentTransaction.replace(R.id.step_detail_container, stepDetailFragment).commit();
+//
+//                        StepDetailFragment stepDetailFragment = (StepDetailFragment) getSupportFragmentManager().beginTransaction().replace(R.id.step_detail_container), stepDetailFragment1);
+//                        stepDetailFragment.updateVideoPlayerAndStepDescription(whichStep);
+//
+//                        StepDetailFragment fragment = new StepDetailFragment();
+//                        fragment.setArguments(arguments);
+//
+//                        mParentActivity.getSupportFragmentManager().beginTransaction()
+//                                .replace(R.id.step_detail_container, fragment)
+//                                .commit();
 
                     } else {
 

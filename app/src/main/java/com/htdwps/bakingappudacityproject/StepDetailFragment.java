@@ -1,12 +1,14 @@
 package com.htdwps.bakingappudacityproject;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -52,12 +54,23 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     private SimpleExoPlayerView mSimpleExoPlayerView;
     private SimpleExoPlayer mSimpleExoPlayer;
     private TextView stepDescription;
+    private LinearLayout.LayoutParams linearLayoutParams;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public StepDetailFragment() {
+    }
+
+    public static StepDetailFragment newInstance(int position) {
+        StepDetailFragment fragment = new StepDetailFragment();
+        Bundle args = new Bundle();
+        args.putInt(StringConstantHelper.STEPS_POSITION_INT_KEY, position);
+        fragment.setArguments(args);
+        return fragment;
+
     }
 
     @Override
@@ -79,6 +92,7 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
         View rootView = inflater.inflate(R.layout.step_detail, container, false);
 
         recipe = getArguments().getParcelable(StringConstantHelper.RECIPE_OBJECT_KEY);
+        current_step = getArguments().getParcelable(StringConstantHelper.STEPS_OBJECT_KEY);
         position_of_step = getArguments().getInt(StringConstantHelper.STEPS_POSITION_INT_KEY);
 
         mSimpleExoPlayerView = rootView.findViewById(R.id.exoplayerview);
@@ -99,6 +113,31 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
             mSimpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
             mSimpleExoPlayerView.setPlayer(mSimpleExoPlayer);
             mSimpleExoPlayer.addListener(this);
+
+            if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+                stepDescription.setVisibility(View.GONE);
+
+                linearLayoutParams = (LinearLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(linearLayoutParams);
+                params.setMargins(0, 0, 0, 0);
+                params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                mSimpleExoPlayerView.setLayoutParams(params);
+
+//                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();
+//                params.width=params.MATCH_PARENT;
+//                params.height=params.MATCH_PARENT;
+//                mSimpleExoPlayerView.setLayoutParams(params);
+//                mSimpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
+
+
+            } else {
+
+                stepDescription.setVisibility(View.VISIBLE);
+
+            }
+
         }
     }
 
@@ -209,6 +248,16 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
             mExoplayerPosition = mSimpleExoPlayer.getCurrentPosition();
             releasePlayer();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (mSimpleExoPlayer != null) {
+            outState.putLong(StringConstantHelper.EXOPLAYER_VIDEO_POSITION, mSimpleExoPlayer.getCurrentPosition());
+        } else {
+            outState.putLong(StringConstantHelper.EXOPLAYER_VIDEO_POSITION, mExoplayerPosition);
+        }
+        super.onSaveInstanceState(outState);
     }
 
 }
