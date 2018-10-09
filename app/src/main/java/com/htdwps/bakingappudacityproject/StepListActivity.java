@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -45,7 +44,7 @@ public class StepListActivity extends AppCompatActivity {
 
     private List<Ingredient> ingredientsList;
     private List<Step> stepList;
-    private Recipe recipe;
+    private static Recipe recipe;
     private TextView tvRecipeName;
     private TextView tvIngredientsListed;
     private Toolbar toolbar;
@@ -93,7 +92,7 @@ public class StepListActivity extends AppCompatActivity {
         // Display recent clicked recipe in widget
         if (savedInstanceState == null) {
 
-            SharedPreferences sharedPreferencesWidget = this.getSharedPreferences(getString(R.string.shared_pref_widget), Context.MODE_PRIVATE|Context.MODE_MULTI_PROCESS);
+            SharedPreferences sharedPreferencesWidget = this.getSharedPreferences(getString(R.string.shared_pref_widget), Context.MODE_PRIVATE | Context.MODE_MULTI_PROCESS);
             SharedPreferences.Editor editor = sharedPreferencesWidget.edit();
             editor.putString(StringConstantHelper.WIDGET_RECIPE_NAME, recipe.getName());
             editor.putString(StringConstantHelper.WIDGET_RECIPE_INGREDIENTS, ingredientsString);
@@ -148,29 +147,17 @@ public class StepListActivity extends AppCompatActivity {
 
                         Toast.makeText(StepListActivity.this, "Tablet " + whichStep, Toast.LENGTH_SHORT).show();
 
+//
 //                        Bundle arguments = new Bundle();
-//                        arguments.putInt(StringConstantHelper.STEPS_POSITION_INT_KEY, whichStep);
-//
-                        StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance(whichStep);
-//                        stepDetailFragment.setArguments(arguments);
-//
-                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                        fragmentTransaction.replace(R.id.step_detail_container, stepDetailFragment).commit();
-//
-//                        StepDetailFragment stepDetailFragment = (StepDetailFragment) getSupportFragmentManager().beginTransaction().replace(R.id.step_detail_container), stepDetailFragment1);
-//                        stepDetailFragment.updateVideoPlayerAndStepDescription(whichStep);
-//
+//                        arguments.putParcelable(StepDetailFragment.ARG_ITEM_ID, step);
 //                        StepDetailFragment fragment = new StepDetailFragment();
 //                        fragment.setArguments(arguments);
-//
 //                        mParentActivity.getSupportFragmentManager().beginTransaction()
-//                                .replace(R.id.step_detail_container, fragment)
-//                                .commit();
+//                                .replace(R.id.step_detail_container, fragment);
 
                     } else {
 
-                        Toast.makeText(StepListActivity.this, "Phone " + whichStep, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(StepListActivity.this, "Phone " + whichStep, Toast.LENGTH_SHORT).show();
 
                         Context context = view.getContext();
 
@@ -221,9 +208,12 @@ public class StepListActivity extends AppCompatActivity {
                     Toast.makeText(mParentActivity, "Clicked Here Phone Layout", Toast.LENGTH_SHORT).show();
 
                     Context context = view.getContext();
+
                     Intent intent = new Intent(context, StepDetailActivity.class);
 
+                    intent.putExtra(StringConstantHelper.STEPS_LIST_ITEM_OBJECT_KEY, recipe);
                     intent.putExtra(StringConstantHelper.STEPS_OBJECT_KEY, step);
+//                    intent.putExtra(StringConstantHelper.STEPS_POSITION_INT_KEY, whichStep);
 
                     context.startActivity(intent);
 
