@@ -28,7 +28,6 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.htdwps.bakingappudacityproject.dummy.DummyContent;
 import com.htdwps.bakingappudacityproject.models.Step;
 import com.htdwps.bakingappudacityproject.util.StringConstantHelper;
 
@@ -52,7 +51,6 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
     private Step mLocalStep;
     private SimpleExoPlayerView mSimpleExoPlayerView;
     private SimpleExoPlayer mSimpleExoPlayer;
