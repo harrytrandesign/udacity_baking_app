@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
 import com.htdwps.bakingappudacityproject.R;
-import com.htdwps.bakingappudacityproject.StepListActivity;
+import com.htdwps.bakingappudacityproject.RecipeStepListActivity;
 import com.htdwps.bakingappudacityproject.util.StringConstantHelper;
 
 /**
@@ -31,7 +31,7 @@ public class IngredientWidget extends AppWidgetProvider {
         views.setTextViewText(R.id.tv_widget_ingredient_list, recipeIngredientStored);
 
         // Click Handler for clicking on the Widget
-        Intent widgetIntent = new Intent(context, StepListActivity.class);
+        Intent widgetIntent = new Intent(context, RecipeStepListActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, widgetIntent, 0);
         views.setOnClickPendingIntent(R.id.ll_widget_view, pendingIntent);
 

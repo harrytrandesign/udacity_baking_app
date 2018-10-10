@@ -56,7 +56,6 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     private TextView stepDescription;
     private LinearLayout.LayoutParams linearLayoutParams;
 
-
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).

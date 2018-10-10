@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/recipestep_list"
+<LinearLayout
     android:name="com.htdwps.bakingappudacityproject.RecipeStepListFragment"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    app:layoutManager="LinearLayoutManager"
-    tools:context=".RecipeStepListActivity"
-    tools:listitem="@layout/recipestep_list_content"/>
+    android:orientation="vertical"
+    tools:context=".RecipeStepListActivity">
+
+    <TextView
+        android:id="@+id/tv_recipe_name_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/card_padding"
+        android:paddingStart="@dimen/card_padding"
+        android:textSize="@dimen/standard_font"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_recipe_ingredients_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/card_padding"
+        android:paddingStart="@dimen/card_padding"
+        android:textSize="@dimen/standard_font"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recipestep_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_recipe_step_card"/>
+
+</LinearLayout>

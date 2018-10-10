@@ -18,18 +18,43 @@
     
     -->
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recipestep_list"
-        android:name="com.htdwps.bakingappudacityproject.RecipeStepListFragment"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="@dimen/item_width"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context="com.htdwps.bakingappudacityproject.RecipeStepListActivity"
-        tools:listitem="@layout/recipestep_list_content"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_recipe_name_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/card_padding"
+            android:paddingStart="@dimen/card_padding"
+            android:textSize="@dimen/standard_font"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_recipe_ingredients_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/card_padding"
+            android:paddingStart="@dimen/card_padding"
+            android:textSize="@dimen/standard_font"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recipestep_list"
+            android:name="com.htdwps.bakingappudacityproject.RecipeStepListFragment"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="@dimen/item_width"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            tools:context="com.htdwps.bakingappudacityproject.RecipeStepListActivity"
+            tools:listitem="@layout/item_recipe_step_card"/>
+
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/recipestep_detail_container"

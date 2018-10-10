@@ -27,7 +27,6 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 import com.htdwps.bakingappudacityproject.dummy.DummyContent;
 import com.htdwps.bakingappudacityproject.models.Step;
 import com.htdwps.bakingappudacityproject.util.StringConstantHelper;
@@ -107,7 +106,7 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
 
                 stepDescriptionTextView.setVisibility(View.GONE);
 
-//                 Expands the size of the Video player
+                // Expands the size of the Video player
                 linearLayoutParams = (LinearLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(linearLayoutParams);
                 params.setMargins(0, 0, 0, 0);
@@ -187,50 +186,50 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (Util.SDK_INT > 23 && mSimpleExoPlayer == null) {
-            initializePlayer();
-            updateVideoPlayerAndStepDescription(current_step);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (Util.SDK_INT <= 23 && mSimpleExoPlayer == null) {
-            initializePlayer();
-            updateVideoPlayerAndStepDescription(current_step);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mSimpleExoPlayer != null) {
-            current_exo_video_position = mSimpleExoPlayer.getCurrentPosition();
-            releasePlayer();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mSimpleExoPlayer != null) {
-            current_exo_video_position = mSimpleExoPlayer.getCurrentPosition();
-            releasePlayer();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mSimpleExoPlayer != null) {
-            current_exo_video_position = mSimpleExoPlayer.getCurrentPosition();
-            releasePlayer();
-        }
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        if (Util.SDK_INT > 23 && mSimpleExoPlayer == null) {
+//            initializePlayer();
+//            updateVideoPlayerAndStepDescription(current_step);
+//        }
+//    }
+//
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (Util.SDK_INT <= 23 && mSimpleExoPlayer == null) {
+//            initializePlayer();
+//            updateVideoPlayerAndStepDescription(current_step);
+//        }
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        if (mSimpleExoPlayer != null) {
+//            current_exo_video_position = mSimpleExoPlayer.getCurrentPosition();
+//            releasePlayer();
+//        }
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        if (mSimpleExoPlayer != null) {
+//            current_exo_video_position = mSimpleExoPlayer.getCurrentPosition();
+//            releasePlayer();
+//        }
+//    }
+//
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        if (mSimpleExoPlayer != null) {
+//            current_exo_video_position = mSimpleExoPlayer.getCurrentPosition();
+//            releasePlayer();
+//        }
+//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
