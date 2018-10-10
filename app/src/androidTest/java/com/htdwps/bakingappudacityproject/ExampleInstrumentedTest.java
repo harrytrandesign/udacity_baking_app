@@ -28,12 +28,14 @@ public class ExampleInstrumentedTest {
     @Rule
     public ActivityTestRule<MainActivity> mActivityTest = new ActivityTestRule<>(MainActivity.class);
 
+    // Check if the recyclerview exists
     @Test
     public void checkRecyclerViewExists() {
         onView(Matchers.anyOf(withId(R.id.rv_recipe_list)))
                 .check(matches(isDisplayed()));
     }
 
+    // Test if the 2nd item in Recyclerview list is Brownies
     @Test
     public void browniesInRecyclerViewList() {
         try {

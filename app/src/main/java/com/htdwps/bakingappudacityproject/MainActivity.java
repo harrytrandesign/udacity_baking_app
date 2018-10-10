@@ -3,7 +3,6 @@ package com.htdwps.bakingappudacityproject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,12 +19,15 @@ import com.htdwps.bakingappudacityproject.util.ThumbnailGridResizer;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    @BindView(R.id.rv_recipe_list)
     RecyclerView rvRecipeList;
 
     private RecipeCardAdapter recipeCardAdapter;
@@ -33,14 +35,16 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayoutManager layoutManager;
     private GridLayoutManager gridLayoutManager;
     private Parcelable savedRecyclerLayoutState;
-    @Nullable
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        rvRecipeList = findViewById(R.id.rv_recipe_list);
+        ButterKnife.bind(this);
+
+//        rvRecipeList = findViewById(R.id.rv_recipe_list);
 
         recipesList = new ArrayList<>();
 
@@ -69,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(Recipe recipe) {
 
-                                Intent recipeIntent = new Intent(getBaseContext(), StepListActivity.class);
+                                Intent recipeIntent = new Intent(getBaseContext(), RecipeStepListActivity.class);
 
                                 recipeIntent.putExtra(StringConstantHelper.RECIPE_OBJECT_KEY, recipe);
 
