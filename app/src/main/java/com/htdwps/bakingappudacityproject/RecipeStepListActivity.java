@@ -52,7 +52,7 @@ public class RecipeStepListActivity extends AppCompatActivity {
 
     private List<Ingredient> listOfIngredients;
     private List<Step> listOfSteps;
-    private Recipe chosenRecipe;
+    private static Recipe chosenRecipe;
     private String ingredientsStringFillIn = "";
 
     @Override
@@ -113,6 +113,11 @@ public class RecipeStepListActivity extends AppCompatActivity {
             condenseIngredientsToSingleString(listOfIngredients);
             tvRecipeIngredients.setText(ingredientsStringFillIn);
 
+        } else {
+
+            Intent intent = new Intent(RecipeStepListActivity.this, MainActivity.class);
+            startActivity(intent);
+
         }
 
     }
@@ -150,7 +155,7 @@ public class RecipeStepListActivity extends AppCompatActivity {
                 Step item = (Step) view.getTag();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putString(RecipeStepDetailFragment.ARG_ITEM_ID, item.getDescription());
+                    arguments.putParcelable(RecipeStepDetailFragment.ARG_ITEM_ID, item);
                     RecipeStepDetailFragment fragment = new RecipeStepDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -158,8 +163,9 @@ public class RecipeStepListActivity extends AppCompatActivity {
                             .commit();
                 } else {
                     Context context = view.getContext();
+
                     Intent intent = new Intent(context, RecipeStepDetailActivity.class);
-                    intent.putExtra(RecipeStepDetailFragment.ARG_ITEM_ID, item.getDescription());
+                    intent.putExtra(RecipeStepDetailFragment.ARG_ITEM_ID, item);
 
                     context.startActivity(intent);
                 }
@@ -180,10 +186,11 @@ public class RecipeStepListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mIdView.setText(mValues.get(position).getDescription());
 
+            holder.mIdView.setText(mValues.get(position).getDescription());
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
+
         }
 
         @Override
@@ -200,4 +207,21 @@ public class RecipeStepListActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+//        grabExtrasFromBundle();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+//        grabExtrasFromBundle();
+
+    }
+
 }

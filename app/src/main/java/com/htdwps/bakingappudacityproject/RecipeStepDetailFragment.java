@@ -27,6 +27,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.htdwps.bakingappudacityproject.dummy.DummyContent;
 import com.htdwps.bakingappudacityproject.models.Step;
 import com.htdwps.bakingappudacityproject.util.StringConstantHelper;
@@ -72,7 +73,8 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+//            mLocalStep = getArguments().getParcelable(ARG_ITEM_ID);
+            mLocalStep = (Step) getArguments().get(ARG_ITEM_ID);
 
             Activity activity = this.getActivity();
         }
@@ -84,11 +86,15 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
         View rootView = inflater.inflate(R.layout.recipestep_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
+        if (mLocalStep != null) {
             stepDescriptionTextView = rootView.findViewById(R.id.tv_recipestep_detail);
-            stepDescriptionTextView.setText(mItem.details);
+            stepDescriptionTextView.setText(mLocalStep.getDescription());
             mSimpleExoPlayerView = rootView.findViewById(R.id.simple_exo_player_view);
         }
+
+        initializePlayer();
+
+        updateVideoPlayerAndStepDescription(current_step);
 
         return rootView;
     }
@@ -129,23 +135,23 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
 
 //        current_step = recipe.getSteps().get(whichStep);
 
-//        stepDescriptionTextView.setText(current_step.getDescription());
+        stepDescriptionTextView.setText(mLocalStep.getDescription());
 
-//        if (current_step.getVideoURL().isEmpty()) {
+        if (mLocalStep.getVideoURL().isEmpty()) {
 
-//            mSimpleExoPlayerView.setVisibility(View.GONE);
+            mSimpleExoPlayerView.setVisibility(View.GONE);
 
-//        } else {
+        } else {
 
-//            mSimpleExoPlayerView.setVisibility(View.VISIBLE);
-//
-        MediaSource mediaSource = new ExtractorMediaSource(Uri.parse("https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffd97a_1-mix-marscapone-nutella-creampie/1-mix-marscapone-nutella-creampie.mp4"), new DefaultDataSourceFactory(getContext(), "Hello"), new DefaultExtractorsFactory(), null, null);
+            mSimpleExoPlayerView.setVisibility(View.VISIBLE);
 
-        mSimpleExoPlayer.prepare(mediaSource);
+            MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(mLocalStep.getVideoURL()), new DefaultDataSourceFactory(getContext(), "Hello"), new DefaultExtractorsFactory(), null, null);
 
-        mSimpleExoPlayer.setPlayWhenReady(true);
+            mSimpleExoPlayer.prepare(mediaSource);
 
-//        }
+            mSimpleExoPlayer.setPlayWhenReady(true);
+
+        }
 
     }
 
@@ -186,50 +192,50 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
 
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        if (Util.SDK_INT > 23 && mSimpleExoPlayer == null) {
-//            initializePlayer();
-//            updateVideoPlayerAndStepDescription(current_step);
-//        }
-//    }
-//
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        if (Util.SDK_INT <= 23 && mSimpleExoPlayer == null) {
-//            initializePlayer();
-//            updateVideoPlayerAndStepDescription(current_step);
-//        }
-//    }
-//
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        if (mSimpleExoPlayer != null) {
-//            current_exo_video_position = mSimpleExoPlayer.getCurrentPosition();
-//            releasePlayer();
-//        }
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        if (mSimpleExoPlayer != null) {
-//            current_exo_video_position = mSimpleExoPlayer.getCurrentPosition();
-//            releasePlayer();
-//        }
-//    }
-//
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//        if (mSimpleExoPlayer != null) {
-//            current_exo_video_position = mSimpleExoPlayer.getCurrentPosition();
-//            releasePlayer();
-//        }
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23 && mSimpleExoPlayer == null) {
+            initializePlayer();
+            updateVideoPlayerAndStepDescription(current_step);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Util.SDK_INT <= 23 && mSimpleExoPlayer == null) {
+            initializePlayer();
+            updateVideoPlayerAndStepDescription(current_step);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mSimpleExoPlayer != null) {
+            current_exo_video_position = mSimpleExoPlayer.getCurrentPosition();
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mSimpleExoPlayer != null) {
+            current_exo_video_position = mSimpleExoPlayer.getCurrentPosition();
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mSimpleExoPlayer != null) {
+            current_exo_video_position = mSimpleExoPlayer.getCurrentPosition();
+            releasePlayer();
+        }
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

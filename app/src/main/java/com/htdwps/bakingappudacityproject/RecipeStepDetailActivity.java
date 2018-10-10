@@ -49,7 +49,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(RecipeStepDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(RecipeStepDetailFragment.ARG_ITEM_ID));
+            arguments.putParcelable(RecipeStepDetailFragment.ARG_ITEM_ID, getIntent().getParcelableExtra(RecipeStepDetailFragment.ARG_ITEM_ID));
 
             RecipeStepDetailFragment fragment = new RecipeStepDetailFragment();
             fragment.setArguments(arguments);
